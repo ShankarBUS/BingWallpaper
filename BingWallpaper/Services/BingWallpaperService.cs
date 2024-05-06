@@ -11,6 +11,7 @@ using Windows.Storage.Streams;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml.Controls;
 using Windows.System.UserProfile;
+using System.Net.NetworkInformation;
 
 namespace BingWallpaper.Services;
 
@@ -47,17 +48,24 @@ public class BingWallpaperService
 
     public static Orientation PreferredOrientation { get; set; }
 
-    public static async Task<ObservableCollection<BingWallpaperImage>?> FetchImagesAsync()
+    public static ObservableCollection<BingWallpaperImage> Images { get; private set; } = [];
+
+    private static StorageFolder localCacheFolder;
+
+    public static async Task FetchImagesAsync()
     {
         try
         {
+            localCacheFolder = ApplicationData.Current.LocalFolder; // We can't set the wallpaper on Windows if the image is in LocalCacheFolder?
             string fileName = DateTime.Now.ToString("yyyy-MM-dd") + ".json";
             string json = string.Empty;
-            if (await ApplicationData.Current.LocalFolder.TryGetItemAsync(fileName) is StorageFile jsonFile)
+            StorageFile? jsonFile = null;
+            if (await localCacheFolder.TryGetItemAsync(fileName) is StorageFile file)
             {
-                json = await FileIO.ReadTextAsync(jsonFile); // Read JSON from cache
+                json = await FileIO.ReadTextAsync(file); // Read JSON from cache
+                jsonFile = file;
             }
-            else
+            else if (NetworkInterface.GetIsNetworkAvailable())
             {
                 var query = HttpUtility.ParseQueryString(string.Empty);
                 query.Add("format", "js");
@@ -70,36 +78,62 @@ public class BingWallpaperService
                 {
                     json = await response.Content.ReadAsStringAsync();
                     // Cache the JSON
-                    jsonFile = await ApplicationData.Current.LocalFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+                    jsonFile = await localCacheFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
                     await FileIO.WriteTextAsync(jsonFile, json);
                 }
             }
 
-            var bingResponse = JsonSerializer.Deserialize<BingWallpaperResponse>(json);
-            if (bingResponse?.Images != null && bingResponse?.Images?.Length > 0)
+            if (!string.IsNullOrEmpty(json) && !string.IsNullOrWhiteSpace(json))
             {
-                foreach (BingWallpaperImage image in bingResponse.Images)
+                var bingResponse = JsonSerializer.Deserialize<BingWallpaperResponse>(json);
+                if (bingResponse?.Images != null && bingResponse?.Images?.Length > 0)
                 {
-                    await LoadImageDataAsync(image);
+                    Images.Clear();
+                    foreach (BingWallpaperImage image in bingResponse.Images)
+                    {
+                        await LoadImageDataAsync(image);
+                        Images.Add(image);
+                    }
                 }
-                return new(bingResponse.Images);
+            }
+
+            await ClearUnusedCacheFilesAsync(jsonFile);
+        }
+        catch { }
+    }
+
+    private static async Task ClearUnusedCacheFilesAsync(StorageFile? jsonFile)
+    {
+        try
+        {
+            List<StorageFile> neededFiles = [];
+            if (jsonFile != null) neededFiles.Add(jsonFile);
+            foreach (BingWallpaperImage image in Images)
+            {
+                if (image.ImageFile != null) neededFiles.Add(image.ImageFile);
+            }
+
+            IReadOnlyList<StorageFile> files = await localCacheFolder.GetFilesAsync();
+            foreach (StorageFile file in files)
+            {
+                if (!neededFiles.Any(x => x.Path == file.Path))
+                {
+                    await file.DeleteAsync();
+                }
             }
         }
         catch { }
-
-        return null;
     }
 
     private static async Task LoadImageDataAsync(BingWallpaperImage? image)
     {
         if (image == null) return;
-
         string cp = image.Copyright ?? string.Empty;
-        string[] cps = cp.Split('(');
+        string[] cps = cp.Split('('); // Copyright contains the caption of the image followed by the actual copyright text in parenthesis
         if (cps.Length == 2)
         {
             image.Caption = cps[0].Trim();
-            image.Copyright = cps[1].Remove(cps[1].Length - 1, 1);
+            image.Copyright = cps[1].Remove(cps[1].Length - 1, 1); // To remove the trailing parenthesis
         }
         StorageFile? imageFile = await GetImageFileAsync(image, PreferredResolution, PreferredOrientation);
         if (imageFile != null)
@@ -134,16 +168,14 @@ public class BingWallpaperService
                 string filename = GetFileName(imgPath);
 
                 // Tries to get the already cached image
-                StorageFile? imageFile = await ApplicationData.Current.LocalFolder.TryGetItemAsync(filename) as StorageFile;
-
-                if (imageFile == null) // If not present locally, then download and save them
+                StorageFile? imageFile = await localCacheFolder.TryGetItemAsync(filename) as StorageFile;
+                if (imageFile == null && NetworkInterface.GetIsNetworkAvailable()) // If not present locally, then download and save them
                 {
                     using HttpClient client = new();
                     HttpResponseMessage response = await client.GetAsync(BingUrl + imgPath);
                     if (response != null && response.StatusCode == System.Net.HttpStatusCode.OK)
                     {
-                        imageFile = await ApplicationData.Current.LocalFolder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
-                        System.Diagnostics.Debug.WriteLine(imageFile.Path);
+                        imageFile = await localCacheFolder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
                         using IRandomAccessStream stream = await imageFile.OpenAsync(FileAccessMode.ReadWrite);
                         await response.Content.CopyToAsync(stream.AsStreamForWrite());
                         await stream.FlushAsync();
@@ -153,7 +185,6 @@ public class BingWallpaperService
             }
             catch { }
         }
-
         return null;
     }
 

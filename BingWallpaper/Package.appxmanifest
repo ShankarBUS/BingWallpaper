@@ -12,7 +12,7 @@
     Version="1.0.0.0" />
 
   <Properties>
-    <DisplayName>Bing Wallpaper</DisplayName>
+    <DisplayName>Daily Wallpapers</DisplayName>
     <PublisherDisplayName>Shankar</PublisherDisplayName>
   </Properties>
 
@@ -30,8 +30,8 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="Bing Wallpaper"
-        Description="Bing Wallpaper">
+        DisplayName="Daily Wallpapers"
+        Description="Daily Wallpapers from Bing Homepage">
         <uap:SplashScreen />
         <uap:DefaultTile/>
       </uap:VisualElements>

@@ -9,12 +9,13 @@
     <UnoSingleProject>true</UnoSingleProject>
 
     <!-- Display name -->
-    <ApplicationTitle>Bing Wallpaper</ApplicationTitle>
+    <ApplicationTitle>Daily Wallpapers</ApplicationTitle>
     <!-- App Identifier -->
     <ApplicationId>com.shankarbus.bingwallpaper</ApplicationId>
     <!-- Versions -->
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
     <!--
       If you encounter this error message:
 
@@ -38,4 +39,8 @@
     </UnoFeatures>
   </PropertyGroup>
 
+  <ItemGroup>
+    <UnoIcon Include="$(MSBuildThisFileDirectory)\Assets\Icons\icon.svg" ForegroundFile="$(MSBuildThisFileDirectory)\Assets\Icons\icon_foreground.svg" AndroidForegroundScale="0.4" WindowsForegroundScale="0.8" Color="#00589e26" />
+    <UnoSplashScreen Include="$(MSBuildThisFileDirectory)Assets\Splash\splash_screen.svg" BaseSize="1024,1024" Color="#589e26" />
+  </ItemGroup>
 </Project>

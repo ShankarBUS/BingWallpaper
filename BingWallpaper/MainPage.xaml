@@ -39,25 +39,33 @@
         </LinearGradientBrush>
       </Grid.Background>
       <Grid.ColumnDefinitions>
-        <ColumnDefinition />
-        <ColumnDefinition />
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="*" />
       </Grid.ColumnDefinitions>
-      <SplitButton x:Name="GetWallpapersButton" Content="Get Wallpapers" Click="GetWallpapersButton_Click"
-                   Margin="0,0,5,0" HorizontalAlignment="Right">
-        <SplitButton.Flyout>
+      <Button x:Name="GetWallpapersButton" Content="Get Wallpapers" Click="GetWallpapersButton_Click"
+                   Margin="0,0,5,0" HorizontalAlignment="Right" />
+      <Button Content="&#xE713;" FontFamily="{ThemeResource SymbolThemeFontFamily}"
+              Margin="5,0,5,0" Grid.Column="1" VerticalAlignment="Stretch">
+        <Button.Flyout>
           <Flyout>
-            <StackPanel Spacing="10">
-              <ComboBox x:Name="resCmb" Header="Resolution" SelectedItem="{x:Bind services:BingWallpaperService.PreferredResolution}" />
-              <ComboBox x:Name="orCmb" Header="Orientation" SelectedItem="{x:Bind services:BingWallpaperService.PreferredOrientation}" />
+            <StackPanel Spacing="10" Width="250">
+              <ComboBox x:Name="resCmb" Header="Resolution" HorizontalAlignment="Stretch" SelectedItem="{x:Bind services:BingWallpaperService.PreferredResolution}" />
+              <ComboBox x:Name="orCmb" Header="Orientation" HorizontalAlignment="Stretch" SelectedItem="{x:Bind services:BingWallpaperService.PreferredOrientation}" />
+              <TextBlock TextWrapping="WrapWholeWords">
+                This application is not affiliated with Microsoft or Microsoft Bing. Use of the images are restricted to wallpaper only.<LineBreak />
+                <LineBreak/>You can check out or contribute to this project on <Hyperlink Click="Hyperlink_Click">GitHub</Hyperlink><LineBreak />
+                <LineBreak />If you have any issues or feedback, please create an issue on the GitHub repository.
+              </TextBlock>
             </StackPanel>
           </Flyout>
-        </SplitButton.Flyout>
-      </SplitButton>
-      <Button x:Name="SetWallpaperButton" Grid.Column="1" Content="Set Wallpaper" Click="SetWallpaperButton_Click"
+        </Button.Flyout>
+      </Button>
+      <Button x:Name="SetWallpaperButton" Grid.Column="2" Content="Set Wallpaper" Click="SetWallpaperButton_Click"
               Margin="5,0,0,0" HorizontalAlignment="Left" />
     </Grid>
     <ProgressRing x:Name="progressRing" IsActive="False" HorizontalAlignment="Center" VerticalAlignment="Center" />
-    <InfoBar x:Name="infoBar" Grid.ColumnSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Center"
+    <InfoBar x:Name="infoBar" VerticalAlignment="Bottom" HorizontalAlignment="Center"
              Margin="20,0,20,70" Background="{ThemeResource SystemControlAcrylicElementBrush}"
              IsOpen="False" Message="Wallpaper set successfully" Severity="Informational" IsClosable="True" />
   </Grid>
