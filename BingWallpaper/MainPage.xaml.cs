@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using Windows.System;
 using BingWallpaper.Services;
 
@@ -11,7 +10,10 @@ public sealed partial class MainPage : Page
         InitializeComponent();
         resCmb.ItemsSource = Enum.GetValues(typeof(Resolution));
         orCmb.ItemsSource = Enum.GetValues(typeof(Services.Orientation));
+        swCmb.ItemsSource = Enum.GetValues(typeof(SetWallpaperPreference));
         Loaded += MainPage_Loaded;
+        swCB.Checked += (s, e) => swCmb.Visibility = Visibility.Collapsed;
+        swCB.Unchecked += (s, e) => swCmb.Visibility = Visibility.Visible;
     }
 
     private async void MainPage_Loaded(object sender, RoutedEventArgs e)
@@ -21,10 +23,6 @@ public sealed partial class MainPage : Page
 
     private async void GetWallpapersButton_Click(object sender, RoutedEventArgs e)
     {
-        if (resCmb.SelectedItem is Resolution resolution)
-            BingWallpaperService.PreferredResolution = resolution;
-        if (orCmb.SelectedItem is Services.Orientation orientation)
-            BingWallpaperService.PreferredOrientation = orientation;
         await GetWallpapersAsync();
     }
 
@@ -38,8 +36,38 @@ public sealed partial class MainPage : Page
 
     private async void SetWallpaperButton_Click(object sender, RoutedEventArgs e)
     {
+        if (UserPreferences.Current.AlwaysAskSetPreference)
+        {
+            setWPFlyout.ShowAt(SetWallpaperButton);
+        }
+        else
+            await TrySetWallpaperAsync(UserPreferences.Current.SetWallpaperPreference);
+    }
+
+    private async void Button_Click(object sender, RoutedEventArgs e)
+    {
+        SetWallpaperPreference preference = (sender as Button)?.Tag switch
+        {
+            "#home" => SetWallpaperPreference.Homescreen,
+            "#lock" => SetWallpaperPreference.Lockscreen,
+            "#both" => SetWallpaperPreference.Both,
+            _ => SetWallpaperPreference.Homescreen,
+        };
+        if (remCB.IsChecked == true)
+        {
+            UserPreferences.Current.AlwaysAskSetPreference = false;
+            UserPreferences.Current.SetWallpaperPreference = preference;
+            remCB.IsChecked = false;
+        }
+        setWPFlyout.Hide();
+
+        await TrySetWallpaperAsync(preference);
+    }
+
+    private async Task TrySetWallpaperAsync(SetWallpaperPreference preference = SetWallpaperPreference.Homescreen)
+    {
         infoBar.IsOpen = false;
-        bool result = await BingWallpaperService.SetWallpaperAsync(flipView.SelectedItem as BingWallpaperImage);
+        bool result = await BingWallpaperService.SetWallpaperAsync(flipView.SelectedItem as BingWallpaperImage, preference);
         if (result)
         {
             infoBar.IsOpen = true;

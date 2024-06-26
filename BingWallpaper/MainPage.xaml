@@ -6,6 +6,16 @@
       xmlns:utu="using:Uno.Toolkit.UI"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
   <Grid utu:SafeArea.Insets="VisibleBounds">
+    <Grid.Resources>
+      <Flyout x:Name="setWPFlyout">
+        <StackPanel Spacing="10" Width="250">
+          <Button HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" Content="Home Screen" Click="Button_Click" Tag="#home" />
+          <Button HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" Content="Lock Screen" Click="Button_Click" Tag="#lock" />
+          <Button HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" Content="Both" Click="Button_Click" Tag="#both" />
+          <CheckBox x:Name="remCB" Content="Remember my choice" />
+        </StackPanel>
+      </Flyout>
+    </Grid.Resources>
     <FlipView x:Name="flipView" HorizontalAlignment="Center" VerticalAlignment="Center">
       <FlipView.ItemTemplate>
         <DataTemplate x:DataType="services:BingWallpaperImage">
@@ -49,9 +59,15 @@
               Margin="5,0,5,0" Grid.Column="1" VerticalAlignment="Stretch">
         <Button.Flyout>
           <Flyout>
-            <StackPanel Spacing="10" Width="250">
-              <ComboBox x:Name="resCmb" Header="Resolution" HorizontalAlignment="Stretch" SelectedItem="{x:Bind services:BingWallpaperService.PreferredResolution}" />
-              <ComboBox x:Name="orCmb" Header="Orientation" HorizontalAlignment="Stretch" SelectedItem="{x:Bind services:BingWallpaperService.PreferredOrientation}" />
+            <StackPanel Spacing="10" Width="250" DataContext="{x:Bind local:UserPreferences.Current}">
+              <ComboBox x:Name="resCmb" Header="Resolution" HorizontalAlignment="Stretch"
+                        SelectedItem="{Binding PreferredResolution, Mode=TwoWay}" />
+              <ComboBox x:Name="orCmb" Header="Orientation" HorizontalAlignment="Stretch"
+                        SelectedItem="{Binding PreferredOrientation, Mode=TwoWay}" />
+              <CheckBox x:Name="swCB" Content="Always ask where to set the image as wallpaper"
+                        IsChecked="{Binding AlwaysAskSetPreference, Mode=TwoWay}" />
+              <ComboBox x:Name="swCmb" Header="Set wallpaper in" HorizontalAlignment="Stretch"
+                        SelectedItem="{Binding SetWallpaperPreference, Mode=TwoWay}" />
               <TextBlock TextWrapping="WrapWholeWords">
                 This application is not affiliated with Microsoft or Microsoft Bing. Use of the images are restricted to wallpaper only.<LineBreak />
                 <LineBreak/>You can check out or contribute to this project on <Hyperlink Click="Hyperlink_Click">GitHub</Hyperlink><LineBreak />

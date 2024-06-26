@@ -1,5 +1,3 @@
-using System;
-using Microsoft.Extensions.Logging;
 using Uno.Resizetizer;
 
 namespace BingWallpaper;
@@ -19,6 +17,7 @@ public partial class App : Application
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
         MainWindow = new Window();
+        MainWindow.Title = "Daily Wallpapers";
 #if DEBUG
         MainWindow.EnableHotReload();
 #endif

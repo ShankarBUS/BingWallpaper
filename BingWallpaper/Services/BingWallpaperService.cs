@@ -1,15 +1,9 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.Json;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 using System.Text.Json.Serialization;
 using Windows.Storage.Streams;
 using Microsoft.UI.Xaml.Media.Imaging;
-using Microsoft.UI.Xaml.Controls;
 using Windows.System.UserProfile;
 using System.Net.NetworkInformation;
 
@@ -28,25 +22,17 @@ public enum Orientation
     Portrait
 }
 
+public enum SetWallpaperPreference
+{
+    Homescreen,
+    Lockscreen,
+    Both
+}
+
 public class BingWallpaperService
 {
     public const string BingUrl = "https://www.bing.com";
     public const string BingWallpaperUrl = "https://www.bing.com/HPImageArchive.aspx";
-
-    static BingWallpaperService()
-    {
-#if ANDROID
-        PreferredResolution = Resolution.High;
-        PreferredOrientation = Orientation.Portrait;
-#else
-        PreferredResolution = Resolution.UHD;
-        PreferredOrientation = Orientation.Landscape;
-#endif
-    }
-
-    public static Resolution PreferredResolution { get; set; }
-
-    public static Orientation PreferredOrientation { get; set; }
 
     public static ObservableCollection<BingWallpaperImage> Images { get; private set; } = [];
 
@@ -135,7 +121,7 @@ public class BingWallpaperService
             image.Caption = cps[0].Trim();
             image.Copyright = cps[1].Remove(cps[1].Length - 1, 1); // To remove the trailing parenthesis
         }
-        StorageFile? imageFile = await GetImageFileAsync(image, PreferredResolution, PreferredOrientation);
+        StorageFile? imageFile = await GetImageFileAsync(image, UserPreferences.Current.PreferredResolution, UserPreferences.Current.PreferredOrientation);
         if (imageFile != null)
         {
             using IRandomAccessStream fileStream = await imageFile.OpenAsync(FileAccessMode.Read);
@@ -147,12 +133,19 @@ public class BingWallpaperService
         }
     }
 
-    public static async Task<bool> SetWallpaperAsync(BingWallpaperImage? image)
+    public static async Task<bool> SetWallpaperAsync(BingWallpaperImage? image, SetWallpaperPreference preference)
     {
 #if ANDROID || WINDOWS
         if (image != null && image.ImageFile != null)
         {
-            return await UserProfilePersonalizationSettings.Current.TrySetWallpaperImageAsync(image.ImageFile);
+            return preference switch
+            {
+                SetWallpaperPreference.Homescreen => await UserProfilePersonalizationSettings.Current.TrySetWallpaperImageAsync(image.ImageFile),
+                SetWallpaperPreference.Lockscreen => await UserProfilePersonalizationSettings.Current.TrySetLockScreenImageAsync(image.ImageFile),
+                SetWallpaperPreference.Both => await UserProfilePersonalizationSettings.Current.TrySetWallpaperImageAsync(image.ImageFile)
+                    && await UserProfilePersonalizationSettings.Current.TrySetLockScreenImageAsync(image.ImageFile),
+                _ => false,
+            };
         }
 #endif
         return false;
