@@ -6,4 +6,7 @@
   -->
   <ItemGroup>
   </ItemGroup>
+  <ItemGroup>
+    <PackageVersion Include="Xamarin.AndroidX.Work.Runtime" Version="2.10.2" />
+  </ItemGroup>
 </Project>

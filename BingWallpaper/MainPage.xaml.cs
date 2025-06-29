@@ -1,4 +1,5 @@
 using Windows.System;
+using BingWallpaper.Models;
 using BingWallpaper.Services;
 
 namespace BingWallpaper;
@@ -9,7 +10,7 @@ public sealed partial class MainPage : Page
     {
         InitializeComponent();
         resCmb.ItemsSource = Enum.GetValues(typeof(Resolution));
-        orCmb.ItemsSource = Enum.GetValues(typeof(Services.Orientation));
+        orCmb.ItemsSource = Enum.GetValues(typeof(Models.Orientation));
         swCmb.ItemsSource = Enum.GetValues(typeof(SetWallpaperPreference));
         Loaded += MainPage_Loaded;
         swCB.Checked += (s, e) => swCmb.Visibility = Visibility.Collapsed;
@@ -38,7 +39,7 @@ public sealed partial class MainPage : Page
     {
         if (UserPreferences.Current.AlwaysAskSetPreference)
         {
-            setWPFlyout.ShowAt(SetWallpaperButton);
+            setWPFlyout.ShowAt(setWPBtn);
         }
         else
             await TrySetWallpaperAsync(UserPreferences.Current.SetWallpaperPreference);
@@ -93,6 +94,15 @@ public sealed partial class MainPage : Page
         try
         {
             await Launcher.LaunchUriAsync(new Uri("https://github.com/ShankarBUS/BingWallpaper"));
+        }
+        catch { }
+    }
+
+    private async void SaveWallpaperButton_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            await BingWallpaperService.SaveWallpaperAsync(flipView.SelectedItem as BingWallpaperImage);
         }
         catch { }
     }

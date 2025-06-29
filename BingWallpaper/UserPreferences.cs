@@ -1,18 +1,19 @@
-using BingWallpaper.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
+using BingWallpaper.Models;
+using Orientation = BingWallpaper.Models.Orientation;
 
 namespace BingWallpaper;
 
-public class UserPreferences : ObservableObject
+public partial class UserPreferences : ObservableObject
 {
     public UserPreferences()
     {
 #if ANDROID
         preferredResolution = Resolution.High;
-        preferredOrientation = Services.Orientation.Portrait;
+        preferredOrientation = Orientation.Portrait;
 #else
         preferredResolution = Resolution.UHD;
-        preferredOrientation = Services.Orientation.Landscape;
+        preferredOrientation = Orientation.Landscape;
 #endif
         alwaysAskSetPreference = true;
         if (ApplicationData.Current.LocalSettings.Values.TryGetValue(nameof(PreferredResolution), out var value) &&
@@ -21,7 +22,7 @@ public class UserPreferences : ObservableObject
             preferredResolution = resolution;
         }
         if (ApplicationData.Current.LocalSettings.Values.TryGetValue(nameof(PreferredOrientation), out var value1) &&
-            Enum.TryParse(typeof(Services.Orientation), value1.ToString(), out var result1) && result1 is Services.Orientation orientation)
+            Enum.TryParse(typeof(Orientation), value1.ToString(), out var result1) && result1 is Orientation orientation)
         {
             preferredOrientation = orientation;
         }
@@ -52,9 +53,9 @@ public class UserPreferences : ObservableObject
     }
 
 
-    private Services.Orientation preferredOrientation;
+    private Orientation preferredOrientation;
 
-    public Services.Orientation PreferredOrientation
+    public Orientation PreferredOrientation
     {
         get => preferredOrientation;
         set
