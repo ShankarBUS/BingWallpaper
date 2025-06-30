@@ -41,46 +41,38 @@
         </DataTemplate>
       </FlipView.ItemTemplate>
     </FlipView>
-    <Grid VerticalAlignment="Bottom" Padding="20,40,20,20">
-      <Grid.Background>
-        <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
-          <GradientStop Color="#88000000" />
-          <GradientStop Color="#00000000" Offset="1" />
-        </LinearGradientBrush>
-      </Grid.Background>
-      <StackPanel Orientation="Horizontal" Spacing="6" Padding="12" CornerRadius="{ThemeResource ControlCornerRadius}"
+    <StackPanel Orientation="Horizontal" Spacing="6" Padding="12" CornerRadius="{ThemeResource ControlCornerRadius}"
                   Background="{ThemeResource AcrylicBackgroundFillColorDefaultBrush}"
-                  VerticalAlignment="Center" HorizontalAlignment="Center">
-        <Button Content="&#xE72C;" FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                  VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="20,40,20,20">
+      <Button Content="&#xE72C;" FontFamily="{ThemeResource SymbolThemeFontFamily}"
               Click="GetWallpapersButton_Click" ToolTipService.ToolTip="Get Wallpapers" />
-        <Button Content="&#xE713;" FontFamily="{ThemeResource SymbolThemeFontFamily}"
+      <Button Content="&#xE713;" FontFamily="{ThemeResource SymbolThemeFontFamily}"
                 Grid.Column="1" VerticalAlignment="Stretch" ToolTipService.ToolTip="Settings">
-          <Button.Flyout>
-            <Flyout>
-              <StackPanel Spacing="10" Width="250" DataContext="{x:Bind local:UserPreferences.Current}">
-                <ComboBox x:Name="resCmb" Header="Resolution" HorizontalAlignment="Stretch"
+        <Button.Flyout>
+          <Flyout>
+            <StackPanel Spacing="10" Width="250" DataContext="{x:Bind local:UserPreferences.Current}">
+              <ComboBox x:Name="resCmb" Header="Resolution" HorizontalAlignment="Stretch"
                         SelectedItem="{Binding PreferredResolution, Mode=TwoWay}" />
-                <ComboBox x:Name="orCmb" Header="Orientation" HorizontalAlignment="Stretch"
+              <ComboBox x:Name="orCmb" Header="Orientation" HorizontalAlignment="Stretch"
                         SelectedItem="{Binding PreferredOrientation, Mode=TwoWay}" />
-                <CheckBox x:Name="swCB" Content="Always ask where to set the image as wallpaper"
+              <CheckBox x:Name="swCB" Content="Always ask where to set the image as wallpaper"
                         IsChecked="{Binding AlwaysAskSetPreference, Mode=TwoWay}" />
-                <ComboBox x:Name="swCmb" Header="Set wallpaper in" HorizontalAlignment="Stretch"
+              <ComboBox x:Name="swCmb" Header="Set wallpaper in" HorizontalAlignment="Stretch"
                         SelectedItem="{Binding SetWallpaperPreference, Mode=TwoWay}" />
-                <TextBlock TextWrapping="WrapWholeWords">
+              <TextBlock TextWrapping="WrapWholeWords">
                 This application is not affiliated with Microsoft or Microsoft Bing. Use of the images are restricted to wallpaper only.<LineBreak />
                 <LineBreak/>You can check out or contribute to this project on <Hyperlink Click="Hyperlink_Click">GitHub</Hyperlink><LineBreak />
                 <LineBreak />If you have any issues or feedback, please create an issue on the GitHub repository.
-                </TextBlock>
-              </StackPanel>
-            </Flyout>
-          </Button.Flyout>
-        </Button>
-        <Button x:Name="setWPBtn" Grid.Column="2" Content="&#xE7B5;" FontFamily="{ThemeResource SymbolThemeFontFamily}"
+              </TextBlock>
+            </StackPanel>
+          </Flyout>
+        </Button.Flyout>
+      </Button>
+      <Button x:Name="setWPBtn" Grid.Column="2" Content="&#xE7B5;" FontFamily="{ThemeResource SymbolThemeFontFamily}"
                 Click="SetWallpaperButton_Click" ToolTipService.ToolTip="Set Wallpaper" />
-        <Button x:Name="SaveWallpaperButton" Grid.Column="3" Content="&#xE74E;" FontFamily="{ThemeResource SymbolThemeFontFamily}"
+      <Button x:Name="SaveWallpaperButton" Grid.Column="3" Content="&#xE74E;" FontFamily="{ThemeResource SymbolThemeFontFamily}"
                 Click="SaveWallpaperButton_Click" ToolTipService.ToolTip="Save Wallpaper" />
-      </StackPanel>
-    </Grid>
+    </StackPanel>
     <ProgressRing x:Name="progressRing" IsActive="False" HorizontalAlignment="Center" VerticalAlignment="Center" />
     <InfoBar x:Name="infoBar" VerticalAlignment="Bottom" HorizontalAlignment="Center"
              Margin="20,0,20,70" Background="{ThemeResource SystemControlAcrylicElementBrush}"
