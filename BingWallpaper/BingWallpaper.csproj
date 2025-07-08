@@ -29,7 +29,4 @@
     <UnoSplashScreen Include="$(MSBuildThisFileDirectory)Assets\Splash\splash_screen.svg" BaseSize="1024,1024" Color="#222222" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
-    <PackageReference Include="Xamarin.AndroidX.Work.Runtime" />
-  </ItemGroup>
 </Project>
