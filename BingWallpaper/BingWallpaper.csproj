@@ -25,8 +25,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <UnoIcon Include="$(MSBuildThisFileDirectory)\Assets\Icons\icon.svg" ForegroundFile="$(MSBuildThisFileDirectory)\Assets\Icons\icon_foreground.svg" AndroidForegroundScale="0.4" WindowsForegroundScale="0.6" Color="#00589e26" />
-    <UnoSplashScreen Include="$(MSBuildThisFileDirectory)Assets\Splash\splash_screen.svg" BaseSize="1024,1024" Color="#589e26" />
+    <UnoIcon Include="$(MSBuildThisFileDirectory)\Assets\Icons\icon.svg" ForegroundFile="$(MSBuildThisFileDirectory)\Assets\Icons\icon_foreground.svg" AndroidForegroundScale="0.4" WindowsForegroundScale="0.6" Color="#000cc054" />
+    <UnoSplashScreen Include="$(MSBuildThisFileDirectory)Assets\Splash\splash_screen.svg" BaseSize="1024,1024" Color="#222222" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
