@@ -1,4 +1,4 @@
-<Project Sdk="Uno.Sdk">
+﻿<Project Sdk="Uno.Sdk">
   <PropertyGroup>
     <TargetFrameworks>
       net9.0-android;
@@ -25,8 +25,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <UnoIcon Include="$(MSBuildThisFileDirectory)\Assets\Icons\icon.svg" ForegroundFile="$(MSBuildThisFileDirectory)\Assets\Icons\icon_foreground.svg" AndroidForegroundScale="0.4" WindowsForegroundScale="0.6" Color="#000cc054" />
-    <UnoSplashScreen Include="$(MSBuildThisFileDirectory)Assets\Splash\splash_screen.svg" BaseSize="1024,1024" Color="#222222" />
+    <UnoIcon Condition="'$(TargetFramework)' == 'net9.0-android'"
+             Include="$(MSBuildThisFileDirectory)\Assets\Icons\android_icon_background.svg"
+             ForegroundFile="$(MSBuildThisFileDirectory)\Assets\Icons\android_icon_foreground.svg"
+             AndroidForegroundScale="0.6"
+             Color="#000cc054" />
+    <UnoIcon Condition="'$(TargetFramework)' != 'net9.0-android'"
+             Include="$(MSBuildThisFileDirectory)\Assets\Icons\icon_background.svg"
+             ForegroundFile="$(MSBuildThisFileDirectory)\Assets\Icons\icon_foreground.svg"
+             Color="#000cc054" />
+    <UnoSplashScreen Include="$(MSBuildThisFileDirectory)\Assets\Splash\splash_screen.svg" BaseSize="1024,1024" Color="#222222" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UnoSplashScreen Remove="D:\BUS\Repos\BingWallpaper\BingWallpaper\Assets\Splash\splash_screen.svg" />
   </ItemGroup>
 
 </Project>

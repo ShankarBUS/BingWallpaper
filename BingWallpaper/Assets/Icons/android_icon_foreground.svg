@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Foreground" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1024 1024">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#linear-gradient-2);
+      }
+
+      .cls-1, .cls-2 {
+        opacity: .5;
+      }
+
+      .cls-3 {
+        fill: url(#linear-gradient-3);
+      }
+
+      .cls-2 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-4 {
+        fill: url(#linear-gradient-4);
+        opacity: .75;
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="512" y1="205" x2="512" y2="819" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset="1" stop-color="#eee"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="512" y1="446.94" x2="512" y2="819" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-3" x1="563.18" y1="548.86" x2="563.18" y2="819" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-4" x1="665.71" y1="295.69" x2="665.71" y2="420.84" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset="1" stop-color="#eee"/>
+    </linearGradient>
+  </defs>
+  <rect id="Frame" class="cls-2" x="205" y="205" width="614" height="614" rx="90" ry="90"/>
+  <path id="MB" class="cls-1" d="M819.04,729.04h0c0-7.74-3.07-15.17-8.54-20.65l-234.83-235.06c-35.15-35.19-92.19-35.19-127.34,0l-234.83,235.06c-5.47,5.48-8.55,12.91-8.54,20.65h0c.02,49.69,40.31,89.96,90,89.96h12.24s409.6,0,409.6,0h12.24c49.69,0,89.98-40.27,90-89.96Z"/>
+  <path id="MF" class="cls-3" d="M819.35,729.35h0c.03-8.16-3.2-16-8.98-21.76l-132.69-132.43c-35.17-35.1-92.14-35.06-127.26.1l-243.42,243.74h422.35c49.57,0,89.81-40.08,90-89.65Z"/>
+  <circle id="Sun" class="cls-4" cx="665.71" cy="358.27" r="62.58"/>
+</svg>
