@@ -6,7 +6,7 @@ namespace BingWallpaper.Droid;
 
 [Application(
     Label = "@string/ApplicationName",
-    Icon = "@mipmap/icon",
+    Icon = "@mipmap/android_icon",
     LargeHeap = true,
     HardwareAccelerated = true,
     Theme = "@style/AppTheme"
