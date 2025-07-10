@@ -32,7 +32,7 @@
 
     <UnoIconBackgroundFile Condition="'$(IsAndroid)' == 'true'">Assets\Icons\android_icon.svg</UnoIconBackgroundFile>
     <UnoIconForegroundFile Condition="'$(IsAndroid)' == 'true'">Assets\Icons\android_icon_foreground.svg</UnoIconForegroundFile>
-    <!--<UnoIconForegroundScale Condition="'$(IsAndroid)' == 'true'">0.6</UnoIconForegroundScale>-->
+    <UnoIconForegroundScale Condition="'$(IsAndroid)' == 'true'">0.6</UnoIconForegroundScale>
 
     <UnoSplashScreenFile>Assets\Splash\splash_screen.svg</UnoSplashScreenFile>
     <UnoSplashScreenBaseSize>1024,1024</UnoSplashScreenBaseSize>
